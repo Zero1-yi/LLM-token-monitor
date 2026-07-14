@@ -1,0 +1,21 @@
+# Logs
+logs/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.spec.bak
+
+# IDE
+.vscode/
+
+# Encrypted config — NEVER commit API keys
+*.enc
+.keyfile
+
+# OS
+Thumbs.db
+.DS_Store
