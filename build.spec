@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 # Ensure the project root is on the path so imports resolve
-_PROJECT_ROOT = Path(__file__).parent
+_PROJECT_ROOT = Path(SPECPATH)
 sys.path.insert(0, str(_PROJECT_ROOT))
 
 a = Analysis(
@@ -35,10 +35,13 @@ a = Analysis(
         'h11',
         'certifi',
         'idna',
+        'i18n',
         'providers',
         'providers.base',
         'providers.openai_provider',
         'providers.deepseek_provider',
+        'ssl',
+        'certifi',
     ],
     hookspath=[],
     hooksconfig={},
@@ -91,5 +94,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='icon.ico' if Path('icon.ico').exists() else None,
+    icon=str(_PROJECT_ROOT / 'icon.ico') if (_PROJECT_ROOT / 'icon.ico').exists() else None,
 )
