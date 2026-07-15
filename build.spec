@@ -14,15 +14,19 @@ from pathlib import Path
 _PROJECT_ROOT = Path(SPECPATH)
 sys.path.insert(0, str(_PROJECT_ROOT))
 
-# Collect all DLLs from Python's DLLs directory (fixes _ctypes, libffi, etc.)
+# Collect all DLLs from Python's DLLs/ and Library/bin/ directories
+# Fixes _ctypes → ffi.dll dependency chain on conda Python
 import os as _os
 import sys as _sys
-_PYTHON_DLLS = _os.path.join(_sys.prefix, 'DLLs')
 _binaries = []
-if _os.path.isdir(_PYTHON_DLLS):
-    for _f in _os.listdir(_PYTHON_DLLS):
-        if _f.endswith(('.pyd', '.dll')):
-            _binaries.append((_os.path.join(_PYTHON_DLLS, _f), '.'))
+for _dir in (
+    _os.path.join(_sys.prefix, 'DLLs'),
+    _os.path.join(_sys.prefix, 'Library', 'bin'),
+):
+    if _os.path.isdir(_dir):
+        for _f in _os.listdir(_dir):
+            if _f.endswith(('.pyd', '.dll')):
+                _binaries.append((_os.path.join(_dir, _f), '.'))
 
 a = Analysis(
     ['main.py'],
