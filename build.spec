@@ -14,12 +14,23 @@ from pathlib import Path
 _PROJECT_ROOT = Path(SPECPATH)
 sys.path.insert(0, str(_PROJECT_ROOT))
 
+# Collect all DLLs from Python's DLLs directory (fixes _ctypes, libffi, etc.)
+import os as _os
+import sys as _sys
+_PYTHON_DLLS = _os.path.join(_sys.prefix, 'DLLs')
+_binaries = []
+if _os.path.isdir(_PYTHON_DLLS):
+    for _f in _os.listdir(_PYTHON_DLLS):
+        if _f.endswith(('.pyd', '.dll')):
+            _binaries.append((_os.path.join(_PYTHON_DLLS, _f), '.'))
+
 a = Analysis(
     ['main.py'],
     pathex=[str(_PROJECT_ROOT)],
-    binaries=[],
+    binaries=_binaries,
     datas=[],
     hiddenimports=[
+        '_ctypes',
         'pystray._win32',
         'pystray._util',
         'PIL._imagingft',
